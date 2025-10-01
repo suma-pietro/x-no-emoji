@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "X Emoji-Free Name Filter",
+  "version": "1.0",
+  "description": "Filters out tweets from users with emojis in their name.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://x.com/*",
+    "*://twitter.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://x.com/*", "*://twitter.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
