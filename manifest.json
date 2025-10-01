@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "X Emoji-Free Name Filter",
+  "name": "x-no-emoji",
   "version": "1.0",
   "description": "Filters out tweets from users with emojis in their name.",
   "permissions": [
@@ -22,4 +22,5 @@
   "action": {
     "default_popup": "popup.html"
   }
+
 }
