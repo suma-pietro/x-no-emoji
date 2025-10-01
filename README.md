@@ -19,7 +19,7 @@ This extension provides a cleaner X/Twitter feed by automatically hiding tweets 
 ### From Source
 1. Clone this repository:
 ```bash
-git clone https://github.com/suma-pietro/X-emoji-free-name-filter-extensions.git
+git clone https://github.com/suma-pietro/x-no-emoji.git
 ```
 
 2. Open Chrome and navigate to `chrome://extensions/`
