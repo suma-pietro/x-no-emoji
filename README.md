@@ -1,4 +1,4 @@
-# X Emoji-Free Name Filter
+# x-no-emoji
 
 A Chrome extension that filters out tweets from users who have emojis in their display names on X (formerly Twitter).
 
