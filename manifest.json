@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "x-no-emoji",
-  "version": "1.0",
+  "version": "2.0",
   "description": "Filters out tweets from users with emojis in their name.",
   "permissions": [
     "storage",
@@ -22,5 +22,4 @@
   "action": {
     "default_popup": "popup.html"
   }
-
 }
