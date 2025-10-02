@@ -23,7 +23,7 @@ This extension cleans up your X/Twitter feed by letting you choose how to handle
 
 
 ```bash
-git clone https://github.com/suma-pietro/x-location-filter.git
+git clone https://github.com/suma-pietro/x-no-emoji.git
 ```
 
 1.  Open Chrome and navigate to `chrome://extensions/`
@@ -85,4 +85,5 @@ To modify or enhance the extension:
 
       - Initial release.
       - Basic functionality to hide tweets from users with emojis in their names.
+
       - Console logging for filtered tweets.
