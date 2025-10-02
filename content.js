@@ -33,7 +33,6 @@ function applyFilter(tweet, reason) {
         tweet.style.transition = 'filter 0.3s ease, opacity 0.3s ease';
         
         tweet.onclick = function(e) {
-            // Impedisce di "aprire" il tweet se si clicca su un link al suo interno
             if (e.target.tagName === 'A' || e.target.closest('a')) {
                 return;
             }
@@ -53,21 +52,16 @@ function hideTweetsWithEmojiNames() {
     tweets.forEach(tweet => {
         tweet.setAttribute('data-emoji-filter-processed', 'true');
 
-        // Trova TUTTI i contenitori del nome utente all'interno del tweet.
-        // Un tweet normale/retweet ne ha 1 (l'autore originale).
-        // Un quote tweet ne ha 2 (chi quota e chi è quotato).
+        
         const userNameContainers = tweet.querySelectorAll('div[data-testid="User-Name"]');
 
-        // Itera su ogni nome utente trovato (principale, retwittato o citato).
         for (const userNameContainer of userNameContainers) {
             const hasEmoji = userNameContainer.querySelector('img[src*="/emoji/"]');
             
             if (hasEmoji) {
-                // Se ANCHE SOLO UNO degli utenti (chi scrive, chi è retwittato o chi è citato)
-                // ha un'emoji nel nome, applica il filtro all'intero blocco del tweet
-                // e interrompi subito il controllo per questo tweet.
+               
                 applyFilter(tweet, 'emoji in relevant user name');
-                return; // Esce dalla funzione forEach per il tweet corrente.
+                return; 
             }
         }
     });
@@ -75,12 +69,11 @@ function hideTweetsWithEmojiNames() {
 
 
 const observer = new MutationObserver((mutations) => {
-    // Aggiungiamo un piccolo ritardo per assicurarci che il DOM sia stabile
-    // quando vengono aggiunti nuovi tweet.
     setTimeout(hideTweetsWithEmojiNames, 300);
 });
 
 observer.observe(document.body, {
     childList: true,
     subtree: true
+
 });
