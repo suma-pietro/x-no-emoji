@@ -33,6 +33,7 @@ function applyFilter(tweet, reason) {
         tweet.style.transition = 'filter 0.3s ease, opacity 0.3s ease';
         
         tweet.onclick = function(e) {
+            // Impedisce di "aprire" il tweet se si clicca su un link al suo interno
             if (e.target.tagName === 'A' || e.target.closest('a')) {
                 return;
             }
@@ -41,6 +42,7 @@ function applyFilter(tweet, reason) {
             this.style.opacity = '1';
             this.style.cursor = 'default';
             this.onclick = null;
+            e.preventDefault();
         };
     }
 }
@@ -51,54 +53,31 @@ function hideTweetsWithEmojiNames() {
     tweets.forEach(tweet => {
         tweet.setAttribute('data-emoji-filter-processed', 'true');
 
-        const userNameContainer = tweet.querySelector('div[data-testid="User-Name"]');
-        
-        if (userNameContainer) {
-            const hasEmoji = userNameContainer.querySelector('img');
+        // Trova TUTTI i contenitori del nome utente all'interno del tweet.
+        // Un tweet normale/retweet ne ha 1 (l'autore originale).
+        // Un quote tweet ne ha 2 (chi quota e chi è quotato).
+        const userNameContainers = tweet.querySelectorAll('div[data-testid="User-Name"]');
 
+        // Itera su ogni nome utente trovato (principale, retwittato o citato).
+        for (const userNameContainer of userNameContainers) {
+            const hasEmoji = userNameContainer.querySelector('img[src*="/emoji/"]');
+            
             if (hasEmoji) {
-                applyFilter(tweet, 'emoji in name');
-                return;
-            }
-        }
-
-        const retweetIndicator = tweet.querySelector('[data-testid="socialContext"]');
-        
-        if (retweetIndicator) {
-            const retweetText = retweetIndicator.textContent;
-            
-            if (retweetText.includes('ha ritwittato') || 
-                retweetText.includes('retweeted') || 
-                retweetText.includes('reposted') ||
-                retweetText.includes('ha repostato')) {
-                applyFilter(tweet, 'retweet');
-                return;
-            }
-        }
-
-        const quoteLabel = tweet.querySelector('[aria-labelledby]');
-        
-        if (quoteLabel) {
-            const labelText = quoteLabel.textContent;
-            
-            if (labelText.includes('Citazione') || labelText.includes('Quote')) {
-                applyFilter(tweet, 'quote tweet');
-                return;
-            }
-        }
-
-        const quoteLink = tweet.querySelector('a[role="link"][href*="/status/"]');
-        if (quoteLink) {
-            const quoteContainer = quoteLink.closest('div[class*="css-175oi2r"]');
-            if (quoteContainer && quoteContainer.querySelector('[data-testid="User-Name"]')) {
-                applyFilter(tweet, 'quote tweet (alt)');
+                // Se ANCHE SOLO UNO degli utenti (chi scrive, chi è retwittato o chi è citato)
+                // ha un'emoji nel nome, applica il filtro all'intero blocco del tweet
+                // e interrompi subito il controllo per questo tweet.
+                applyFilter(tweet, 'emoji in relevant user name');
+                return; // Esce dalla funzione forEach per il tweet corrente.
             }
         }
     });
 }
 
+
 const observer = new MutationObserver((mutations) => {
-    hideTweetsWithEmojiNames();
+    // Aggiungiamo un piccolo ritardo per assicurarci che il DOM sia stabile
+    // quando vengono aggiunti nuovi tweet.
+    setTimeout(hideTweetsWithEmojiNames, 300);
 });
 
 observer.observe(document.body, {
